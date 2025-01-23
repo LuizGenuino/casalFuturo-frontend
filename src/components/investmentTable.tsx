@@ -4,7 +4,7 @@ import ItemTable from "@/intefaces/ItemTable";
 
 const no_marked = "w-24 bg-gray-100 text-gray-800 text-xs font-medium m-2 py-2 rounded border border-gray-500 cursor-pointer"
 const marked_user_1 = "w-24 bg-blue-100 text-blue-800 text-xs font-medium m-2 py-2 rounded border border-blue-500 cursor-pointer"
-const marked_user_2 = "w-24 bg-green-100 text-green-800 text-xs font-medium m-2 py-2 rounded border border-green-500 cursor-pointer"
+const marked_user_2 = "w-24 bg-pink-100 text-pink-800 text-xs font-medium m-2 py-2 rounded border border-pink-500 cursor-pointer"
 
 export default function InvestmentTable({ id_user }: { id_user: string }) {
   const { userData, investmentTable, loading, error, toggleItem } = useUserAndInvestmentTable(id_user);
@@ -39,7 +39,7 @@ export default function InvestmentTable({ id_user }: { id_user: string }) {
               <div className="my-4 md:my-0" >
                 <p>Investimento Atual do Casal: R$ {investmentTable.total_value}</p>
                 <p>
-                  Investimento Total: {new Intl.NumberFormat('pt-BR', {
+                  Investimento Desejado: {new Intl.NumberFormat('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                   }).format(
@@ -49,7 +49,7 @@ export default function InvestmentTable({ id_user }: { id_user: string }) {
                   )}
                 </p>
               </div>
-              <div className="bg-green-500 rounded-full p-3 text-white">
+              <div className="bg-pink-500 rounded-full p-3 text-white">
                 <p>Nome: {investmentTable.user_2?.name}</p>
                 <p>Total Investido: {new Intl.NumberFormat('pt-BR', {
                   style: 'currency',
