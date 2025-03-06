@@ -45,7 +45,7 @@ export default function Organize() {
 
 
 
-  const createOrGetUserDocument = async (userId) => {
+  const createOrGetUserDocument = async (userId: string) => {
     const userRef = doc(db, "organizacao", userId);
     const docSnap = await getDoc(userRef);
 
@@ -60,9 +60,9 @@ export default function Organize() {
     let soma = 0
 
     if (docSnap.exists()) {
-      let obj = Object.entries(docSnap.data());
+      let obj = Object.entries(docSnap.data() as Record<string, unknown>);
       
-      obj = obj.filter((item) => item[0] !== 'salario').forEach((element) => {
+      obj = obj.filter((item) => item[0] !== 'salario').forEach((element: any) => {
         console.log(element);
         
         soma += element[1]
@@ -76,7 +76,7 @@ export default function Organize() {
   };
 
 
-  const updateUserField = async (field, value) => {
+  const updateUserField = async (field: string, value: number) => {
     await updateDoc(userRef, {
       [field]: value
     });
@@ -84,14 +84,14 @@ export default function Organize() {
     await getUserData()
   };
 
-  const deleteUserField = async (field) => {
+  const deleteUserField = async (field: string) => {
     await updateDoc(userRef, {
       [field]: deleteField()
     });
     await getUserData()
   };
 
-  const operation = (op, field, value) => {
+  const operation = (op: string, field: string, value: any) => {
     if (op === "update") {
       updateUserField(field, value)
     }
