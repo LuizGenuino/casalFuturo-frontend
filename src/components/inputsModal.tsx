@@ -2,12 +2,10 @@ import Icon from "@mdi/react";
 import { mdiPencil, mdiTrashCan } from '@mdi/js';
 import { useState } from "react";
 
-export default function InputsModal({ user, operation, dataDocs, total }) {
+export default function InputsModal({ operation, dataDocs, total }: { operation: any, dataDocs: any, total: any }) {
     const [isOpen, setIsOpen] = useState(false);
     const [field, setField] = useState('')
     const [value, setValue] = useState('')
-
-    console.log(dataDocs);
     
     return (
         <>
@@ -64,7 +62,7 @@ export default function InputsModal({ user, operation, dataDocs, total }) {
                             </div>
                         </div>
                         <div className="relative border-t border-slate-200 py-4 leading-normal text-slate-600 font-light">
-                            {dataDocs.map((item, index) => (
+                            {dataDocs.map((item: any, index: any) => (
                                 <div className="flex w-[100%] justify-around" key={index}>
                                     <p className="w-[100%]">{item[0]}:</p>
                                     <p className="w-[50px]">{item[1]}%</p>
@@ -78,7 +76,7 @@ export default function InputsModal({ user, operation, dataDocs, total }) {
                                                 color="green" />
                                         </button> */}
                                         <button className="bg-red-400 p-1 rounded"
-                                            onClick={()=> operation('delete', item[0], item[1])}
+                                            onClick={() => operation('delete', item[0], item[1])}
                                         >
                                             <Icon path={mdiTrashCan}
                                                 size={0.8}

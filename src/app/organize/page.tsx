@@ -5,6 +5,7 @@ import InputsModal from "@/components/inputsModal";
 import { useEffect, useState } from "react";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import ExpenseManager from "@/components/expenseManager";
 
 
 
@@ -60,18 +61,14 @@ export default function Organize() {
     let soma = 0
 
     if (docSnap.exists()) {
-      let obj = Object.entries(docSnap.data() as Record<string, unknown>);
-      
-      obj = obj.filter((item) => item[0] !== 'salario').forEach((element: any) => {
-        console.log(element);
-        
-        soma += element[1]
-      });
-      setObjDocs(docSnap.data())
-      setDataDocs(obj);
-      setTotal(soma)
-      
+      let array: any = Object.entries( docSnap.data() || {}).filter((item: any) => item[0] !== 'salario');
 
+      array.forEach((element: any) => { 
+        soma += element[1]
+      });    
+      setObjDocs(docSnap.data())
+      setDataDocs(array);
+      setTotal(soma)   
     }
   };
 
@@ -101,10 +98,7 @@ export default function Organize() {
     }
   }
 
-  if (!user && !dataDocs) return <p>aguarde....</p>
-
-  console.log(dataDocs);
-  
+  if (!user && !dataDocs && !objDocs ) return <p>aguarde....</p>
 
   return (
     <>
@@ -117,10 +111,10 @@ export default function Organize() {
         </header>
         <main>
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <InputsModal user={user} operation={operation} dataDocs={dataDocs} total={total} />
+            <InputsModal operation={operation} dataDocs={dataDocs} total={total} />
             <div className="w-[100%] flex justify-around sm:justify-center items-end mt-4 sm:mt-0" >
               <div className="w-[70%] sm:w-[40%] mr-2">
-                <label className="block text-gray-700">Salario Atual</label>
+                <label className="block text-gray-700">Atualizar Salario</label>
                 <input type="number"
                   value={salario}
                   onChange={(e) => setSalario(e.target.value)}
@@ -141,6 +135,10 @@ export default function Organize() {
                   Salvar
                 </button>
               </div>
+            </div>
+
+            <div className="relative border-t border-slate-200 py-4 leading-normal text-slate-600 font-light mt-6">
+                  <ExpenseManager dataDocs={dataDocs} objDocs={objDocs} total={total} user={user} />
             </div>
           </div>
         </main>
