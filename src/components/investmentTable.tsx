@@ -58,7 +58,7 @@ export default function InvestmentTable({ id_user }: { id_user: string }) {
               </div>
             </div>
 
-            <div className="flex flex-wrap" >
+            <div className="flex flex-wrap justify-center" >
               {
                 investmentTable.data?.map((item, index) => {
                   return (

@@ -1,5 +1,6 @@
 'use client'
 
+import AddToHomeScreen from "@/components/AddToHomeScreen";
 import Header from "@/components/header";
 import InvestmentTable from "@/components/investmentTable";
 import { useEffect, useState } from "react";
@@ -32,6 +33,7 @@ export default function Inicio() {
           </div>
         </main>
       </div>
+      <AddToHomeScreen />
     </>
   )
 }
