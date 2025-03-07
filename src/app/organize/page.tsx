@@ -68,7 +68,8 @@ export default function Organize() {
       });    
       setObjDocs(docSnap.data())
       setDataDocs(array);
-      setTotal(soma)   
+      setTotal(soma)  
+      
     }
   };
 
@@ -78,13 +79,22 @@ export default function Organize() {
       [field]: value
     });
 
+    await updateDoc(userRef, {
+      ["Disponivel"]: 100 - (total + value)
+    });
+
     await getUserData()
   };
 
-  const deleteUserField = async (field: string) => {
+  const deleteUserField = async (field: string, value: number) => {
     await updateDoc(userRef, {
       [field]: deleteField()
     });
+
+    await updateDoc(userRef, {
+      ["Disponivel"]: 100 - (total - value)
+    });
+
     await getUserData()
   };
 
@@ -94,7 +104,7 @@ export default function Organize() {
     }
 
     if (op === "delete") {
-      deleteUserField(field)
+      deleteUserField(field, value)
     }
   }
 

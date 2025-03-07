@@ -75,22 +75,17 @@ export default function InputsModal({ operation, dataDocs, total }: { operation:
                                                 rotate={90}
                                                 color="green" />
                                         </button> */}
-                                        <button className="bg-red-400 p-1 rounded"
+                                        <button className="p-1 rounded" disabled={item[0]=== "Disponivel"}
                                             onClick={() => operation('delete', item[0], item[1])}
                                         >
                                             <Icon path={mdiTrashCan}
                                                 size={0.8}
-                                                color="red" />
+                                                color={item[0]=== "Disponivel" ? "gray" : "red"} />
                                         </button>
                                     </p>
 
                                 </div>
                             ))}
-                            {total < 100 && (<div className="flex w-[100%] justify-around">
-                                <p className="w-[100%]" >Disponivel:</p>
-                                <p className="w-[50px]" >{100 - total}%</p>
-                                <p className="w-[50px]" ></p>
-                            </div>)}
                         </div>
 
                         <div className="flex shrink-0 flex-wrap items-center pt-4 justify-end">
