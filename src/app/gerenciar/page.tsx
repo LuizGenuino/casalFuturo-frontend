@@ -128,7 +128,7 @@ export default function Gerenciar() {
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <AddGastosModal updateExpenseField={updateExpenseField} dataDocs={dataDocs} />
             <div className="relative border-t border-slate-200 py-4 leading-normal text-slate-600 font-light mt-6">
-                  <ExpenseManager dataDocs={dataDocs} objDocs={objDocs} total={total} user={user} />
+                  {/* <ExpenseManager dataDocs={dataDocs} objDocs={objDocs} total={total} user={user} /> */}
             </div>
           </div>
         </main>
