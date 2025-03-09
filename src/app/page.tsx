@@ -4,11 +4,17 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
 
-export default function HomePage(){
+export default function HomePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((reg) => console.log('Service Worker registrado'))
+        .catch((err) => console.error('Falha no registro do Service Worker', err));
+    }
     if (!loading) {
       if (user) {
         // Se o usuário está logado, redireciona para a página de início

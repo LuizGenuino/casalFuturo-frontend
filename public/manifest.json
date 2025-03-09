@@ -1,7 +1,7 @@
 {
     "name": "CasalFuturo",
     "short_name": "Futuro",
-    "description": "Um app PWA incrível!",
+    "description": "App de Investimento para Casais",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
