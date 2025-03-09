@@ -12,12 +12,12 @@ const AddToHomeScreen = () => {
     // Detecta se é iOS (Safari)
     const userAgent = window.navigator.userAgent.toLowerCase();
     setIsIOS(/iphone|ipad|ipod/.test(userAgent));
+    setShowInstallMessage(window.innerWidth < 600 ? true : false)
 
     // Captura o evento de instalação no Android
     const beforeInstallPromptHandler = (e: any) => {
       e.preventDefault();
       setPromptEvent(e);
-      setShowInstallMessage(true);
       setShow(true)
     };
 
@@ -34,6 +34,7 @@ const AddToHomeScreen = () => {
     }
   };
 
+
   return (
     <div>
       {/* Mostrar instrução para iOS */}
@@ -41,7 +42,13 @@ const AddToHomeScreen = () => {
         <div className="p-4 fixed bottom-0 right-[5vw] left-[5vw] bg-white w-[90vw] border-2 rounded-t-lg shadow-xl" >
           <div className="flex items-center" >
             <Image src={Logo} alt="Logo" className="size-20 p-1" />
-            <p>📲 Para instalar, toque em <strong>Compartilhar</strong> e depois em <strong>Adicionar à Tela Inicial</strong>.</p>
+            <p>📲 Para instalar, toque em <strong>Compartilhar</strong>  <span role="img" aria-label="share icon">
+              {' '}
+              ⎋{' '}
+            </span> e depois em <strong>Adicionar à Tela Inicial</strong>  <span role="img" aria-label="plus icon">
+                {' '}
+                ➕{' '}
+              </span>.</p>
           </div>
           <div className="flex justify-end mt-2" >
             <button onClick={() => setShow(false)} className="bg-red-500 text-white p-2 rounded">
@@ -54,7 +61,7 @@ const AddToHomeScreen = () => {
 
       {/* Botão de instalação no Android */}
       {
-        promptEvent && show && (
+        promptEvent && show && showInstallMessage && (
           <div className="p-4 fixed bottom-0 right-[5vw] left-[5vw] bg-white w-[90vw] border-2 rounded-t-lg shadow-xl" >
             <div className="flex items-center" >
               <Image src={Logo} alt="Logo" className="size-20 p-1" />
