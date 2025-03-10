@@ -5,7 +5,31 @@ import InputsModal from "@/components/inputsModal";
 import { useEffect, useState } from "react";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteField } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import ExpenseManager from "@/components/expenseManager";
+import SalaryManager from "@/components/salaryManager";
+
+
+const coresPieChart = [
+  "#FF6384", // rosa avermelhado
+  "#36A2EB", // azul
+  "#FFCE56", // amarelo
+  "#4BC0C0", // turquesa
+  "#9966FF", // roxo
+  "#FF9F40", // laranja
+  "#C9CBCF", // cinza claro
+  "#FFCD56", // amarelo pastel
+  "#4D5360", // cinza escuro
+  "#8BC34A", // verde limão
+  "#F06292", // rosa claro
+  "#BA68C8", // lilás
+  "#7986CB", // azul violeta
+  "#4DB6AC", // verde água
+  "#FFD54F", // amarelo dourado
+  "#A1887F", // marrom claro
+  "#90A4AE", // cinza azulado
+  "#E57373", // vermelho claro
+  "#81C784", // verde claro
+  "#64B5F6"  // azul claro
+];
 
 
 
@@ -51,7 +75,7 @@ export default function Organize() {
     const docSnap = await getDoc(userRef);
 
     if (!docSnap.exists()) {
-      await setDoc(userRef, {"Disponivel": 100})
+      await setDoc(userRef, {"Disponivel": [100, coresPieChart[0]]})
     }
     return userRef
   }
@@ -63,8 +87,9 @@ export default function Organize() {
     if (docSnap.exists()) {
       let array: any = Object.entries( docSnap.data() || {}).filter((item: any) => item[0] !== 'salario');
 
-      array.forEach((element: any) => { 
-        soma += element[1]
+      array.forEach((element: any) => {
+        if(element[0] !== "Disponivel") 
+        soma += element[1][0]
       });    
       setObjDocs(docSnap.data())
       setDataDocs(array);
@@ -76,25 +101,29 @@ export default function Organize() {
 
   const updateUserField = async (field: string, value: number) => {
     await updateDoc(userRef, {
-      [field]: value
+      [field]:field === 'salario'? value : [ value, coresPieChart[dataDocs.length || 0]]
     });
 
-    await updateDoc(userRef, {
-      ["Disponivel"]: 100 - (total + value)
-    });
+    if(field !== 'salario'){  
+      await updateDoc(userRef, {
+        ["Disponivel"]: [( 100 - (total + value)),  coresPieChart[0]]
+      });
+    }
 
     await getUserData()
   };
 
-  const deleteUserField = async (field: string, value: number) => {
+  const deleteUserField = async (field: string, value: any) => {
     await updateDoc(userRef, {
       [field]: deleteField()
     });
 
-    await updateDoc(userRef, {
-      ["Disponivel"]: 100 - (total - value)
-    });
-
+    if(field !== 'salario'){
+      await updateDoc(userRef, {
+        ["Disponivel"]: [ (100 - (total - value[0])),  coresPieChart[0]]
+      });
+    }
+  
     await getUserData()
   };
 
@@ -135,6 +164,9 @@ export default function Organize() {
               <div className="w-[20%] sm:w-[25%] ">
                 <button
                   onClick={() => {
+                    if(salario === ""){
+                      return
+                    }
                     operation("update", 'salario', Number(salario))
                     setSalario('')
 
@@ -148,7 +180,7 @@ export default function Organize() {
             </div>
 
             <div className="relative border-t border-slate-200 py-4 leading-normal text-slate-600 font-light mt-6">
-                  <ExpenseManager dataDocs={dataDocs} objDocs={objDocs} total={total} user={user} />
+                  <SalaryManager dataDocs={dataDocs} objDocs={objDocs} user={user} />
             </div>
           </div>
         </main>

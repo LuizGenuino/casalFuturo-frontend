@@ -5,27 +5,22 @@ import { useEffect, useState } from "react";
 
 Chart.register(CategoryScale);
 
-export default function ExpenseManager({ user, dataDocs, objDocs, total }: { user: any, dataDocs: any, objDocs: any, total: any }) {
+export default function ExpenseManager({ user, dataDocs, objDocs, gastoDocs, totalGasto }: { user: any, dataDocs: any, objDocs: any, gastoDocs: any, totalGasto: any }) {
     const [dataChart, setDataChart] = useState<any>()
+    const [expenseList, setExpenseList] = useState<any>()
+    const [month, setMonth] = useState(0)
 
     useEffect(() => {
 
-        if (dataDocs) {         
-
+        if (dataDocs) {
+            console.log(dataDocs);
+            
             const data = {
                 labels: dataDocs?.map((item: any) => item[0]),
                 datasets: [{
                     label: 'Porcentagem',
-                    data: dataDocs?.map((item: any) => item[1]),
-                    backgroundColor: [
-                        'rgb(247, 0, 53)',
-                        'rgb(5, 127, 207)',
-                        'rgb(255, 205, 86)',
-                        'rgb(10, 212, 44)',
-                        'rgb(255, 148, 9)',
-                        'rgb(0, 248, 227)',
-                        'rgb(117, 3, 139)',
-                    ],
+                    data: dataDocs?.map((item: any) => item[1][0]),
+                    backgroundColor: dataDocs?.map((item: any) => item[1][1]),
                     hoverOffset: 4,
                     borderColor: "black",
                     borderWidth: 1
@@ -35,42 +30,55 @@ export default function ExpenseManager({ user, dataDocs, objDocs, total }: { use
             setDataChart(data)
         }
 
-    }, [dataDocs])
+        if (gastoDocs) {
+            console.log(gastoDocs);
+            const array = Object.entries(gastoDocs).filter((item: any) => {
+                const currentDate = new Date().getMonth()
+                const expenseDate = new Date(item[1].data).getMonth()
+                return expenseDate === currentDate && item
+            })
+            setExpenseList(array)
+
+        }
+
+    }, [gastoDocs, month])
 
 
-    if (!user && !dataDocs && !objDocs && !total) {
+    if (!user && !dataDocs && !gastoDocs && !totalGasto) {
         return <p>aguarde....</p>
     }
 
     return (
         <div>
-            <div className="flex flex-col w-[100%] justify-center items-center" >
-                <p className="my-4 text-lg" ><strong>Meu Salario Atual:</strong> {new Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL'
-                }).format(objDocs?.salario || 0)}</p>
-
-                <div className="mt-4 w-[90%] max-w-[600px]" >
-                    <div className=" border-b border-slate-400 flex w-[100%] justify-between my-3">
-                        <p className="w-[55%]">Despesas</p>
-                        <p className="w-[15%]">%</p>
-                        <p className="w-[30%] text-end">Valor</p>
-
-                    </div>
-                    {dataDocs?.map((item: any, index: any) => (
-                        <div className=" border-b border-slate-300 flex w-[100%] justify-between my-3" key={index}>
-                            <p className="w-[55%]">{item[0]}:</p>
-                            <p className="w-[15%]">{item[1]}%</p>
-                            <p className="w-[30%] text-end">{new Intl.NumberFormat('pt-BR', {
+            <div className="flex flex-col w-[100%] justify-center items-center border-2 rounded-lg p-2" >
+                {expenseList && expenseList.map((item: any, index: any) => {
+                    const bgColor = `bg-[${item[1].categoria[0]}]`
+                    
+                    return (
+                    <div key={index} className="border-b flex flex-col w-[100%]  p-2">
+                        <div className="flex flex-row justify-between">
+                            <p className="text-xl font-bold" >{item[1].titulo}</p>
+                            <p className="bg-green-200 text-green-900 me-2 px-3 py-1 rounded-lg text-base font-bold">{new Intl.NumberFormat('pt-BR', {
                                 style: 'currency',
                                 currency: 'BRL'
-                            }).format((objDocs?.salario * item[1]) / 100)}</p>
-
+                            }).format(item[1].valor || 0)}</p>
                         </div>
-                    ))}
-                </div>
+                        <p >{item[1].descricao}</p>
+                        <div className="flex flex-row justify-between" >
+                            <p className={`${bgColor} text-white me-2 px-3 py-1 rounded-lg`} >{item[1].categoria[0]}</p>
+                            <p >{new Intl.DateTimeFormat("pt-BR", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            }).format(new Date(item[1].data))}</p>
+                        </div>
+
+                    </div>
+                )})}
             </div>
-            { dataChart && (<div>
+            {dataChart && (<div>
                 <Pie
                     data={dataChart}
                     options={{

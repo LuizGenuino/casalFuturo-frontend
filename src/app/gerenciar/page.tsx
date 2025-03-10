@@ -15,7 +15,6 @@ export default function Gerenciar() {
   const [userRef, setUserRef] = useState<any>(null);
   const [dataDocs, setDataDocs] = useState<any>(null);
   const [objDocs, setObjDocs] = useState<any>(null);
-  const [total, setTotal] = useState(0)
   const [gastoDocs, setGastoDocs] = useState<any>(null);
   const [totalGasto, setTotalGasto] = useState(0)
   const db = getFirestore()
@@ -66,15 +65,13 @@ export default function Gerenciar() {
     let soma = 0
 
     if (docSnap.exists()) {
-      let array: any = Object.entries( docSnap.data() || {}).filter((item: any) => item[0] !== 'salario');
+      let array: any = Object.entries(docSnap.data() || {}).filter((item: any) => item[0] !== 'salario');
 
-      array.forEach((element: any) => { 
+      array.forEach((element: any) => {
         soma += element[1]
-      });    
+      });
       setObjDocs(docSnap.data())
       setDataDocs(array);
-      setTotal(soma)  
-      
     }
   };
   const getExpenseData = async () => {
@@ -82,14 +79,14 @@ export default function Gerenciar() {
     let soma = 0
 
     if (docSnap.exists()) {
-      let array: any = Object.entries( docSnap.data() || {})
+      let array: any = Object.entries(docSnap.data() || {})
 
-      array.forEach((element: any) => { 
+      array.forEach((element: any) => {
         soma += element[1]?.valor
-      });    
+      });
       setGastoDocs(docSnap.data())
-      setTotalGasto(soma)  
-      
+      setTotalGasto(soma)
+
     }
   };
 
@@ -97,7 +94,7 @@ export default function Gerenciar() {
   const updateExpenseField = async (obj: object) => {
 
     await updateDoc(userRef, {
-      [ Object.keys(gastoDocs || {}).length  || 0]: obj
+      [Object.keys(gastoDocs || {}).length || 0]: obj
     });
 
     await getExpenseData()
@@ -112,9 +109,8 @@ export default function Gerenciar() {
   };
 
 
-  if (!user && !dataDocs && !objDocs ) return <p>aguarde....</p>
+  if (!user && !dataDocs && !gastoDocs) return <p>aguarde....</p>
 
-  
   return (
     <>
       <div className="min-h-full">
@@ -128,7 +124,7 @@ export default function Gerenciar() {
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <AddGastosModal updateExpenseField={updateExpenseField} dataDocs={dataDocs} />
             <div className="relative border-t border-slate-200 py-4 leading-normal text-slate-600 font-light mt-6">
-                  {/* <ExpenseManager dataDocs={dataDocs} objDocs={objDocs} total={total} user={user} /> */}
+              <ExpenseManager dataDocs={dataDocs} objDocs={objDocs} user={user} gastoDocs={gastoDocs} totalGasto={totalGasto}/>
             </div>
           </div>
         </main>

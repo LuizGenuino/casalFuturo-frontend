@@ -6,7 +6,7 @@ export default function AddGastosModal({ updateExpenseField, dataDocs }: { updat
     const [isOpen, setIsOpen] = useState(false);
     const [titulo, setTitulo] = useState('')
     const [descricao, setDescricao] = useState('')
-    const [categoria, setCategoria] = useState('')
+    const [categoria, setCategoria] = useState<any>([])
     const [data, setData] = useState('')
     const [valor, setValor] = useState('')
 
@@ -63,10 +63,10 @@ export default function AddGastosModal({ updateExpenseField, dataDocs }: { updat
                                 <label className="block text-gray-700 mb-2">Cateogira</label>
 
                                 <select className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" 
-                                name="categoria" id="categoria" value={categoria}  onChange={(e) => setCategoria(e.target.value)} required>
+                                name="categoria" id="categoria" value={categoria}  onChange={(e) => setCategoria(e.target.value.split(','))} required>
                                      <option value="">escolha....</option>
                                      {dataDocs && dataDocs.map((item:any, index:any) => (
-                                        <option value={item[0]} key={index}>{item[0]}</option>
+                                        <option value={[item[0], item[1][1]]} key={index}>{[item[0]]}</option>
                                      ))}
                                 </select>
                             </div>
@@ -86,7 +86,7 @@ export default function AddGastosModal({ updateExpenseField, dataDocs }: { updat
                                             return
                                         }
                                         updateExpenseField({titulo, descricao, data, categoria, valor: Number(valor)})
-                                        setCategoria('')
+                                        setCategoria([])
                                         setData('')
                                         setDescricao('')
                                         setValor('')

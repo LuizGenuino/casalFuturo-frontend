@@ -2,6 +2,7 @@ import Icon from "@mdi/react";
 import { mdiPencil, mdiTrashCan } from '@mdi/js';
 import { useState } from "react";
 
+
 export default function InputsModal({ operation, dataDocs, total }: { operation: any, dataDocs: any, total: any }) {
     const [isOpen, setIsOpen] = useState(false);
     const [field, setField] = useState('')
@@ -65,7 +66,7 @@ export default function InputsModal({ operation, dataDocs, total }: { operation:
                             {dataDocs.map((item: any, index: any) => (
                                 <div className="flex w-[100%] justify-around" key={index}>
                                     <p className="w-[100%]">{item[0]}:</p>
-                                    <p className="w-[50px]">{item[1]}%</p>
+                                    <p className="w-[50px]">{item[1][0]}%</p>
                                     <p className="w-[50px]">
                                         {/* <button className="bg-green-400 p-1 rounded mr-1">
                                             <Icon path={mdiPencil}
